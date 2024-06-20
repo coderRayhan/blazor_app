@@ -32,22 +32,13 @@ public static class CreateEmployee
 
         public async Task<Result<int>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var employee = new Employee
-            {
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Email = request.Email,
-                DoB = request.DoB,
-                Gender = request.Gender,
-                DepartmentId = request.DepartmentId,
-                PhotoPath = request.PhotoPath
-            };
+            var employee = request.Adapt<Employee>();
 
             _context.Add(employee);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return employee.Id;
+            return Result<int>.Success(employee.Id);
         }
     }
 }

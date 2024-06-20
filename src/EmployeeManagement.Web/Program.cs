@@ -1,4 +1,6 @@
 using EmployeeManagement.Web.Components;
+using EmployeeManagement.Web.Interfaces;
+using EmployeeManagement.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddHttpClient("blazorHttp", (client) =>
+{
+    client.BaseAddress = new Uri("http://localhost:5260");
+});
+
+builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
