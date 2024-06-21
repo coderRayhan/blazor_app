@@ -21,13 +21,14 @@ else
 
                 <img class="card-img-top" 
                     src="@Employee.PhotoPath" 
-                    @onmousemove="@(e => Coordinates = $"X => {e.ClientX} & Y => {e.ClientY}")" />
+                    @onmousemove="@Mouse_Move" />
 
                 <h4>Email: @Employee.Email</h4>
                 <h4>Gender: @Employee.Gender.ToString()</h4>
                 <h4>Department: @Employee.Department.DepartmentName</h4>
+                    <button class="btn btn-primary" @onclick="@Show_Hide">@ButtonText</button>
             </div>
-            <div class="card-footer text-center">
+            <div class="card-footer text-center @ClassName">
                 <a href="#" class="btn btn-primary">Back</a>
                 <a href="#" class="btn btn-primary">Edit</a>
                 <a href="#" class="btn btn-danger">Delete</a>
