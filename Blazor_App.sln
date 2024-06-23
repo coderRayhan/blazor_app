@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement.Domain",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement.API", "src\EmployeeManagement.API\EmployeeManagement.API.csproj", "{C16A6179-E82D-4BB9-8C81-A7806843505E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement.Web", "C:\Users\ADDIE Soft Ltd\Desktop\EmployeeManagement.Web\EmployeeManagement.Web.csproj", "{914EB6F0-32D9-44C2-A102-C729A5CDC102}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement.Web", "src\EmployeeManagement.Web\EmployeeManagement.Web.csproj", "{914EB6F0-32D9-44C2-A102-C729A5CDC102}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

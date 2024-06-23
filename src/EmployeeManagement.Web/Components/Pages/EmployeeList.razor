@@ -1,0 +1,21 @@
+﻿@page "/employeelist"
+@rendermode InteractiveServer
+@inherits EmployeeListBase
+<h3>Employee List</h3>
+<h6>Employee Count => @SelectedEmployeeCount</h6>
+<input type="checkbox" @bind="ShowFooter" id="showFooter" />
+<label for="showFooter">Show Footer</label>
+
+@if (Employees == null)
+{
+    <div class="spinner"></div>
+}
+else
+{
+    <div class="card-deck" style="display:flex; flex-wrap:wrap">
+        @foreach (var employee in Employees)
+        {
+            <EmployeeCard Employee="employee" ShowFooter="@ShowFooter" OnSelectCheckboxChange="Child_Select_Changed" />
+        }
+    </div>
+}
