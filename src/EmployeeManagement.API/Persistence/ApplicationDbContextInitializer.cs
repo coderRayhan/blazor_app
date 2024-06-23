@@ -11,7 +11,7 @@ namespace EmployeeManagement.API.Persistence
             var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitializer>();
 
             await initialiser.InitialiseAsync();
-            await initialiser.SeedAsync();
+            //await initialiser.SeedAsync();
         }
     }
     public class ApplicationDbContextInitializer
