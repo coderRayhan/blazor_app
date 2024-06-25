@@ -1,3 +1,4 @@
+using AutoMapper;
 using EmployeeManagement.Web.Components;
 using EmployeeManagement.Web.Interfaces;
 using EmployeeManagement.Web.Services;
@@ -12,6 +13,8 @@ builder.Services.AddHttpClient("blazorHttp", (client) =>
 {
     client.BaseAddress = new Uri("http://localhost:5260");
 });
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();

@@ -1,14 +1,19 @@
 ﻿@page "/editemployee/{id}"
+@using EmployeeManagement.Domain.Enums
 @rendermode InteractiveServer
 
 <h3>EditEmployee</h3>
-<EditForm Model="@Employee">
+<EditForm Model="@EmployeeViewModel">
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
     <div class="row form-group mb-2">
         <div class="col-md-2">
             <label class="form-label">First Name</label>
         </div>
         <div class="col-md-10">
-            <InputText @bind-Value="Employee.FirstName" class="form-control" placeholder="First Name"></InputText>
+            <InputText @bind-Value="EmployeeViewModel.FirstName" class="form-control" placeholder="First Name"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.FirstName)" />
         </div>
     </div>
     <div class="row form-group mb-2">
@@ -16,7 +21,8 @@
             <label class="form-label">Last Name</label>
         </div>
         <div class="col-md-10">
-            <InputText @bind-Value="Employee.LastName" class="form-control" placeholder="First Name"></InputText>
+            <InputText @bind-Value="EmployeeViewModel.LastName" class="form-control" placeholder="First Name"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.LastName)" />
         </div>
     </div>
     <div class="row form-group mb-2">
@@ -24,7 +30,8 @@
             <label class="form-label">Date of Birth</label>
         </div>
         <div class="col-md-10">
-            <InputDate @bind-Value="Employee.DoB" class="form-control"></InputDate>
+            <InputDate @bind-Value="EmployeeViewModel.DoB" class="form-control"></InputDate>
+            <ValidationMessage For="@(() => EmployeeViewModel.DoB)" />
         </div>
     </div>
     <div class="row form-group mb-2">
@@ -32,7 +39,17 @@
             <label class="form-label">Email</label>
         </div>
         <div class="col-md-10">
-            <InputText @bind-Value="Employee.Email" class="form-control" placeholder="Email"></InputText>
+            <InputText @bind-Value="EmployeeViewModel.Email" class="form-control" placeholder="Email"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.Email)" />
+        </div>
+    </div>
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Compare Email</label>
+        </div>
+        <div class="col-md-10">
+            <InputText @bind-Value="EmployeeViewModel.CompareEmail" class="form-control" placeholder="Email"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.CompareEmail)" />
         </div>
     </div>
     <div class="row form-group mb-2">
@@ -40,10 +57,11 @@
             <label class="form-label">Gender</label>
         </div>
         <div class="col-md-10">
-            <InputSelect @bind-Value="Gender" class="form-control">
-                <option value="0">Choose Option</option>
-                <option value="1">Male</option>
-                <option value="2">Female</option>
+            <InputSelect @bind-Value="EmployeeViewModel.Gender" class="form-control">
+                @foreach (var gender in Enum.GetValues(typeof(Gender)))
+                {
+                    <option value="@gender">@gender</option>
+                }
             </InputSelect>
         </div>
     </div>
@@ -52,12 +70,23 @@
             <label class="form-label">Department</label>
         </div>
         <div class="col-md-10">
-            <InputSelect @bind-Value="DepartmentId" class="form-control">
+            <InputSelectInt @bind-Value="EmployeeViewModel.DepartmentId" class="form-control">
                 @foreach (var item in Departments)
                 {
                     <option value="@item.Id">@item.DepartmentName</option>
                 }
-            </InputSelect>
+            </InputSelectInt>
+        </div>
+    </div>
+
+    <span class="text-warning">This is for testing Complext type validation</span>
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Department Name</label>
+        </div>
+        <div class="col-md-10">
+            <InputText @bind-Value="EmployeeViewModel.Department.DepartmentName" class="form-control" placeholder="Department Name"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.Department.DepartmentName)" />
         </div>
     </div>
 </EditForm>
