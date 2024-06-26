@@ -24,4 +24,13 @@ public class EmployeeService : IEmployeeService
         var employees = await client.GetFromJsonAsync<IEnumerable<Employee>>("/api/employee");
         return employees;
     }
+
+    public async Task<Employee> UpdateEmployeeAsync(Employee employee)
+    {
+        var client = _clientFactory.CreateClient("blazorHttp");
+        var response = await client.PutAsJsonAsync<Employee>("/api/employee", employee);
+        if (response.IsSuccessStatusCode)
+            return employee;
+        return null;
+    }
 }

@@ -3,7 +3,7 @@
 @rendermode InteractiveServer
 
 <h3>EditEmployee</h3>
-<EditForm Model="@EmployeeViewModel">
+<EditForm Model="@EmployeeViewModel" OnInvalidSubmit="OnValidSubmitAsync">
     <DataAnnotationsValidator />
 
     <ValidationSummary />
@@ -79,7 +79,7 @@
         </div>
     </div>
 
-    <span class="text-warning">This is for testing Complext type validation</span>
+@*     <span class="text-warning">This is for testing Complext type validation</span>
     <div class="row form-group mb-2">
         <div class="col-md-2">
             <label class="form-label">Department Name</label>
@@ -88,5 +88,7 @@
             <InputText @bind-Value="EmployeeViewModel.Department.DepartmentName" class="form-control" placeholder="Department Name"></InputText>
             <ValidationMessage For="@(() => EmployeeViewModel.Department.DepartmentName)" />
         </div>
-    </div>
+    </div> *@
+
+    <button class="btn btn-primary mt-4" type="submit">Submit</button>
 </EditForm>

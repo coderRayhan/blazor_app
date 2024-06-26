@@ -16,6 +16,8 @@ namespace EmployeeManagement.Web.Components.Pages
         public IEmployeeService employeeService { get; set; }
         [Inject]
         public IDepartmentService departmentService { get; set; }
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
         [Parameter]
         public string Id { get; set; }
         public IEnumerable<Department> Departments { get; set; } = new List<Department>();
@@ -24,6 +26,16 @@ namespace EmployeeManagement.Web.Components.Pages
             Employee = await employeeService.GetEmployeeByIdAsync(int.Parse(Id));
             EmployeeViewModel = _mapper.Map<EmployeeViewModel>(Employee);
             Departments = await departmentService.GetDepartmentsAsync();
+        }
+
+        public async Task OnValidSubmitAsync()
+        {
+            var employee = _mapper.Map<Employee>(EmployeeViewModel);
+            var updatedEmployee = await employeeService.UpdateEmployeeAsync(employee);
+            if (updatedEmployee is not null)
+            {
+                NavigationManager.NavigateTo("/employeeList");
+            }
         }
     }
 }
