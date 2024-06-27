@@ -20,7 +20,7 @@
         </div>
     }
 </div>
-<ConfirmModal />
+<ConfirmModal @ref="DeleteConfirmation" />
 @code {
     [Parameter]
     public Employee Employee { get; set; }
@@ -33,7 +33,7 @@
     [Inject]
     public IEmployeeService employeeService { get; set; }
 
-    protected ConfirmModalBase Confirm { get; set; } = new();
+    protected ConfirmModalBase DeleteConfirmation { get; set; } = new();
 
     private async void Select_Changed(ChangeEventArgs e)
     {
@@ -42,8 +42,8 @@
 
     public async void Delete_Employee()
     {
-        Confirm.ConfirmButtonText = "Delete";
-        Confirm.Show_Dialog();
+        DeleteConfirmation.ConfirmButtonText = "Delete";
+        DeleteConfirmation.Show_Dialog();
         // await employeeService.DeleteEmployeeAsync(Employee.Id);
         // await OnDeleteEmployeeAsync.InvokeAsync(Employee.Id);
     }
