@@ -11,6 +11,22 @@ public class EmployeeService : IEmployeeService
         _clientFactory = clientFactory;
     }
 
+    public async Task<Employee> CreateEmployeeAsync(Employee employee)
+    {
+        var client = _clientFactory.CreateClient("blazorHttp");
+        var response = await client.PostAsJsonAsync<Employee>("/api/employee", employee);
+        if (response.IsSuccessStatusCode)
+            return employee;
+        return null;
+    }
+
+    public async Task DeleteEmployeeAsync(int id)
+    {
+        var client = _clientFactory.CreateClient("blazorHttp");
+        await client.DeleteAsync($"/api/employee/{id}");
+        //if(response.IsSuccessStatusCode) return response
+    }
+
     public async Task<Employee> GetEmployeeByIdAsync(int id)
     {
         var client = _clientFactory.CreateClient("blazorHttp");

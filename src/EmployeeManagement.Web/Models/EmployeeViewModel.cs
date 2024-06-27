@@ -7,6 +7,7 @@ namespace EmployeeManagement.Web.Models
 {
     public class EmployeeViewModel
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "First name is required")]
         [MinLength(2)]
         public string FirstName { get; set; } = string.Empty;

@@ -1,5 +1,6 @@
 ﻿@rendermode InteractiveServer
 @using EmployeeManagement.Domain.Entities
+@using EmployeeManagement.Web.Interfaces
 <div class="card m-3" style="min-width:18rem; max-width:30%">
     <div class="card-header">
         <input type="checkbox" @onchange="Select_Changed" />
@@ -12,9 +13,9 @@
         <div class="card-footer text-center">
             <a href="@($"/employeeDetails/{Employee.Id}")" class="btn btn-primary m-1">View</a>
 
-            <a href="@($"/editemployee/{Employee.Id}")" class="btn btn-primary m-1">Edit</a>
+            <a href="@($"/createOrEditEmployee/{Employee.Id}")" class="btn btn-primary m-1">Edit</a>
 
-            <a href="#" class="btn btn-primary m-1">Delete</a>
+            <button @onclick="Delete_Employee" class="btn btn-danger m-1">Delete</button>
         </div>
     }
 </div>
@@ -26,9 +27,19 @@
     public bool ShowFooter { get; set; }
     [Parameter]
     public EventCallback<bool> OnSelectCheckboxChange { get; set; } = new EventCallback<bool>();
+    [Parameter]
+    public EventCallback<int> OnDeleteEmployeeAsync { get; set; } = new EventCallback<int>();
+    [Inject]
+    public IEmployeeService employeeService { get; set; }
 
     private async void Select_Changed(ChangeEventArgs e)
     {
         await OnSelectCheckboxChange.InvokeAsync((bool)e.Value);
+    }
+
+    public async void Delete_Employee()
+    {
+        await employeeService.DeleteEmployeeAsync(Employee.Id);
+        await OnDeleteEmployeeAsync.InvokeAsync(Employee.Id);
     }
 }

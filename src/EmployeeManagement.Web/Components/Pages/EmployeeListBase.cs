@@ -8,12 +8,12 @@ namespace EmployeeManagement.Web.Components.Pages
     {
         [Inject]
         public IEmployeeService service { get; set; }
-        public IEnumerable<Employee> Employees { get; set; }
+        public List<Employee> Employees { get; set; }
         public int SelectedEmployeeCount { get; set; }
         public bool ShowFooter { get; set; } = true;
         protected override async Task OnInitializedAsync()
         {
-            Employees = await service.GetEmployeesAsync();
+            Employees = (await service.GetEmployeesAsync()).ToList();
         }
 
         protected void Child_Select_Changed(bool val)
@@ -26,6 +26,12 @@ namespace EmployeeManagement.Web.Components.Pages
             {
                 SelectedEmployeeCount--;
             }
+        }
+
+        protected async void Delete_Employee(int Id)
+        {
+            Employees = (await service.GetEmployeesAsync()).ToList();
+            StateHasChanged();
         }
     }
 }

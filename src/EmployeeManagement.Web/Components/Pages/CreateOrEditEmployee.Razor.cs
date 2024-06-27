@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Components;
 
 namespace EmployeeManagement.Web.Components.Pages
 {
-    public partial class EditEmployee
+    public partial class CreateOrEditEmployee
     {
+        public string PageTitle { get; set; }
         [Inject]
         private IMapper _mapper { get; set; }
         private Employee Employee { get; set; } = new Employee();
@@ -23,19 +24,40 @@ namespace EmployeeManagement.Web.Components.Pages
         public IEnumerable<Department> Departments { get; set; } = new List<Department>();
         protected override async Task OnInitializedAsync()
         {
-            Employee = await employeeService.GetEmployeeByIdAsync(int.Parse(Id));
+            int.TryParse(Id, out int id);
+
+            if (id != 0)
+            {
+                Employee = await employeeService.GetEmployeeByIdAsync(int.Parse(Id));
+                PageTitle = "Edit Employee";
+            }
+            else PageTitle = "Create Employee";
             EmployeeViewModel = _mapper.Map<EmployeeViewModel>(Employee);
+
             Departments = await departmentService.GetDepartmentsAsync();
         }
 
         public async Task OnValidSubmitAsync()
         {
+            Employee result = new();
             var employee = _mapper.Map<Employee>(EmployeeViewModel);
-            var updatedEmployee = await employeeService.UpdateEmployeeAsync(employee);
-            if (updatedEmployee is not null)
-            {
-                NavigationManager.NavigateTo("/employeeList");
-            }
+            if(employee.Id != 0) result = await employeeService.UpdateEmployeeAsync(employee);
+
+            else result = await employeeService.CreateEmployeeAsync(employee);
+
+            if (result is not null) NavigateToEmployeeList();
+        }
+
+        public async Task OnDeleteAsync()
+        {
+            await employeeService.DeleteEmployeeAsync(EmployeeViewModel.Id);
+
+            NavigateToEmployeeList();
+        }
+
+        public void NavigateToEmployeeList()
+        {
+            NavigationManager.NavigateTo("/employeelist");
         }
     }
 }

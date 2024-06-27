@@ -1,7 +1,15 @@
 ﻿@page "/employeelist"
 @rendermode InteractiveServer
 @inherits EmployeeListBase
-<h3>Employee List</h3>
+<div class="row">
+    <div class="col-md-10">
+        <h3>Employee List</h3>
+    </div>
+    <div class="col-md-2 align-items-end">
+        <a class="btn btn-primary" href="createOrEditEmployee">Add Employee</a>
+    </div>
+</div>
+
 <h6>Employee Count => @SelectedEmployeeCount</h6>
 <input type="checkbox" @bind="ShowFooter" id="showFooter" />
 <label for="showFooter">Show Footer</label>
@@ -15,7 +23,7 @@ else
     <div class="card-deck" style="display:flex; flex-wrap:wrap">
         @foreach (var employee in Employees)
         {
-            <EmployeeCard Employee="employee" ShowFooter="@ShowFooter" OnSelectCheckboxChange="Child_Select_Changed" />
+            <EmployeeCard Employee="employee" ShowFooter="@ShowFooter" OnSelectCheckboxChange="Child_Select_Changed" OnDeleteEmployeeAsync="Delete_Employee" />
         }
     </div>
 }

@@ -1,9 +1,10 @@
-﻿@page "/editemployee/{id}"
+﻿@page "/createOrEditEmployee/{id}"
+@page "/createOrEditEmployee"
 @using EmployeeManagement.Domain.Enums
 @rendermode InteractiveServer
 
-<h3>EditEmployee</h3>
-<EditForm Model="@EmployeeViewModel" OnInvalidSubmit="OnValidSubmitAsync">
+<h3>@PageTitle</h3>
+<EditForm Model="@EmployeeViewModel" OnValidSubmit="OnValidSubmitAsync">
     <DataAnnotationsValidator />
 
     <ValidationSummary />
@@ -79,16 +80,20 @@
         </div>
     </div>
 
-@*     <span class="text-warning">This is for testing Complext type validation</span>
+    @*     <span class="text-warning">This is for testing Complext type validation</span>
     <div class="row form-group mb-2">
-        <div class="col-md-2">
-            <label class="form-label">Department Name</label>
-        </div>
-        <div class="col-md-10">
-            <InputText @bind-Value="EmployeeViewModel.Department.DepartmentName" class="form-control" placeholder="Department Name"></InputText>
-            <ValidationMessage For="@(() => EmployeeViewModel.Department.DepartmentName)" />
-        </div>
+    <div class="col-md-2">
+    <label class="form-label">Department Name</label>
+    </div>
+    <div class="col-md-10">
+    <InputText @bind-Value="EmployeeViewModel.Department.DepartmentName" class="form-control" placeholder="Department Name"></InputText>
+    <ValidationMessage For="@(() => EmployeeViewModel.Department.DepartmentName)" />
+    </div>
     </div> *@
 
     <button class="btn btn-primary mt-4" type="submit">Submit</button>
+    @if (EmployeeViewModel.Id != 0)
+    {
+        <button class="btn btn-danger mt-4" type="button" @onclick="OnDeleteAsync">Delete</button>
+    }
 </EditForm>
