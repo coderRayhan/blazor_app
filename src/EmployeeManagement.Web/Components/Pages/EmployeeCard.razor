@@ -1,6 +1,7 @@
 ﻿@rendermode InteractiveServer
 @using EmployeeManagement.Domain.Entities
 @using EmployeeManagement.Web.Interfaces
+@using CustomComponent
 <div class="card m-3" style="min-width:18rem; max-width:30%">
     <div class="card-header">
         <input type="checkbox" @onchange="Select_Changed" />
@@ -19,7 +20,7 @@
         </div>
     }
 </div>
-
+<ConfirmModal />
 @code {
     [Parameter]
     public Employee Employee { get; set; }
@@ -32,6 +33,8 @@
     [Inject]
     public IEmployeeService employeeService { get; set; }
 
+    protected ConfirmModalBase Confirm { get; set; } = new();
+
     private async void Select_Changed(ChangeEventArgs e)
     {
         await OnSelectCheckboxChange.InvokeAsync((bool)e.Value);
@@ -39,7 +42,9 @@
 
     public async void Delete_Employee()
     {
-        await employeeService.DeleteEmployeeAsync(Employee.Id);
-        await OnDeleteEmployeeAsync.InvokeAsync(Employee.Id);
+        Confirm.ConfirmButtonText = "Delete";
+        Confirm.Show_Dialog();
+        // await employeeService.DeleteEmployeeAsync(Employee.Id);
+        // await OnDeleteEmployeeAsync.InvokeAsync(Employee.Id);
     }
 }

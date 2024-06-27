@@ -2,9 +2,14 @@
 
 namespace CustomComponent
 {
-    public class ConfirmDialogBase : ComponentBase
+    public class ConfirmModalBase : ComponentBase
     {
         public bool ShowConfirmDialog { get; set; } = false;
         public string ConfirmButtonText { get; set; } = "Ok";
+        public void Show_Dialog()
+        {
+            ShowConfirmDialog = true;
+            StateHasChanged();
+        }
     }
 }
