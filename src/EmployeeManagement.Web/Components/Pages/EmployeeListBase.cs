@@ -1,5 +1,6 @@
 ﻿using EmployeeManagement.Domain.Entities;
 using EmployeeManagement.Web.Interfaces;
+using EmployeeManagement.Web.Services;
 using Microsoft.AspNetCore.Components;
 
 namespace EmployeeManagement.Web.Components.Pages

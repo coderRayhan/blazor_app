@@ -13,7 +13,7 @@
 <h6>Employee Count => @SelectedEmployeeCount</h6>
 <input type="checkbox" @bind="ShowFooter" id="showFooter" />
 <label for="showFooter">Show Footer</label>
-
+@* <MudSnackbarProvider /> *@
 @if (Employees == null)
 {
     <div class="spinner"></div>
@@ -21,9 +21,10 @@
 else
 {
     <div class="card-deck" style="display:flex; flex-wrap:wrap">
-        @foreach (var employee in Employees)
+    @foreach (var employee in Employees)
         {
-            <EmployeeCard Employee="employee" ShowFooter="@ShowFooter" OnSelectCheckboxChange="Child_Select_Changed" OnDeleteEmployeeAsync="Delete_Employee" />
+            <EmployeeCard Employee="employee" ShowFooter="@ShowFooter" OnSelectCheckboxChange="Child_Select_Changed"
+                OnDeleteEmployeeAsync="Delete_Employee" />
         }
     </div>
 }

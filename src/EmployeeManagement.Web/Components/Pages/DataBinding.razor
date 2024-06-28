@@ -1,28 +1,31 @@
 ﻿@page "/databinding"
 @rendermode InteractiveServer
+@inject ISnackbar s
 <h3>DataBinding</h3>
 //one way
-<span>@Name</span> <hr />
+<span>@Name</span>
+<hr />
 
-<span>These values is changed on change event</span> <br/>
-<input type="text" value="@Name" @onchange="@(e => Name = e.Value.ToString())"/> <br />
+<span>These values is changed on change event</span> <br />
+<input type="text" value="@Name" @onchange="@(e => Name = e.Value.ToString())" /> <br />
 <input @bind="Name" />
 <br />
-<input type="text" @bind-value="Name" /><hr />
+<input type="text" @bind-value="Name" />
+<hr />
 
 <span>These values is changed on input event</span>
 <br />
-<input type="text" value="@Name" @oninput="@(e => Name = e.Value.ToString())"/> <br />
-<input type="text" @bind="Name" @bind:event="oninput"/> <hr />
+<input type="text" value="@Name" @oninput="@(e => Name = e.Value.ToString())" /> <br />
+<input type="text" @bind="Name" @bind:event="oninput" />
+<hr />
 
 <span>bind-style</span>
 <br />
 <input @bind-value="Color" />
 <br />
-<div @bind-style="Color" @bind-style:event="onchange" >
+<div @bind-style="Color" @bind-style:event="onchange">
     <span>This color is coming from bind attribute</span>
 </div>
-
 @code {
     public string Name { get; set; } = "John Doe";
     public string Color { get; set; } = "background-color:green";

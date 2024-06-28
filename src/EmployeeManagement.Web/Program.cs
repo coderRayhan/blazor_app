@@ -19,6 +19,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddMudServices();
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<SnackbarSevice>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

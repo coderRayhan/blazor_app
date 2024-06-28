@@ -3,7 +3,9 @@
 @using EmployeeManagement.Web.Interfaces
 @using EmployeeManagement.Web.Components
 @using CustomComponent
+@using EmployeeManagement.Web.Services
 @inject IDialogService DialogService
+
 <div class="card m-3" style="min-width:18rem; max-width:30%">
     <div class="card-header">
         <input type="checkbox" @onchange="Select_Changed" />
@@ -38,6 +40,8 @@
     public EventCallback<int> OnDeleteEmployeeAsync { get; set; } = new EventCallback<int>();
     [Inject]
     public IEmployeeService employeeService { get; set; }
+    [Inject]
+    public SnackbarSevice snackbarSevice { get; set; }
 
     protected ConfirmModalBase DeleteConfirmation { get; set; } = new();
 
@@ -66,6 +70,13 @@ DialogService.Show<ConfirmDialog>("Simple Dialog", options);
         if (isConfirmed)
         {
             await employeeService.DeleteEmployeeAsync(Employee.Id);
+            snackbarSevice.Show_Snackbar("Deleted successfully", MudBlazor.Severity.Success, op =>
+            {
+                op.BackgroundBlurred = true;
+                op.CloseAfterNavigation = true;
+                op.ShowTransitionDuration = 300;
+                op.HideTransitionDuration = 300;
+            });
             await OnDeleteEmployeeAsync.InvokeAsync(Employee.Id);
         }
     }
