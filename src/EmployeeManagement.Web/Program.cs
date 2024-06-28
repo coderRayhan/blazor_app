@@ -2,6 +2,7 @@ using AutoMapper;
 using EmployeeManagement.Web.Components;
 using EmployeeManagement.Web.Interfaces;
 using EmployeeManagement.Web.Services;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +16,7 @@ builder.Services.AddHttpClient("blazorHttp", (client) =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
+builder.Services.AddMudServices();
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
 var app = builder.Build();

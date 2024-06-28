@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CustomComponent\CustomComponent.csproj" />
-    <ProjectReference Include="D:\blazor_app\src\EmployeeManagement.Domain\EmployeeManagement.Domain.csproj" />
+    <ProjectReference Include="..\EmployeeManagement.Domain\EmployeeManagement.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

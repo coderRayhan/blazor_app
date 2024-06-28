@@ -1,7 +1,9 @@
 ﻿@rendermode InteractiveServer
 @using EmployeeManagement.Domain.Entities
 @using EmployeeManagement.Web.Interfaces
+@using EmployeeManagement.Web.Components
 @using CustomComponent
+@inject IDialogService DialogService
 <div class="card m-3" style="min-width:18rem; max-width:30%">
     <div class="card-header">
         <input type="checkbox" @onchange="Select_Changed" />
@@ -16,11 +18,15 @@
 
             <a href="@($"/createOrEditEmployee/{Employee.Id}")" class="btn btn-primary m-1">Edit</a>
 
-            <button @onclick="Delete_Employee" class="btn btn-danger m-1">Delete</button>
+            @* <button @onclick="DeleteUser" class="btn btn-danger m-1">Delete</button> *@
+            <MudButton @onclick="Delete_Employee" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete"
+                Color="Color.Error">
+                Delete
+            </MudButton>
         </div>
     }
 </div>
-<ConfirmModal @ref="DeleteConfirmation" />
+<ConfirmModal @ref="DeleteConfirmation" OnConfirmationChange="Confirm_Clicked" />
 @code {
     [Parameter]
     public Employee Employee { get; set; }
@@ -40,11 +46,27 @@
         await OnSelectCheckboxChange.InvokeAsync((bool)e.Value);
     }
 
-    public async void Delete_Employee()
+    public async Task Delete_Employee()
     {
+        DeleteConfirmation.ModalBodyText = $"Do you want to delete {Employee.FirstName}";
         DeleteConfirmation.ConfirmButtonText = "Delete";
         DeleteConfirmation.Show_Dialog();
         // await employeeService.DeleteEmployeeAsync(Employee.Id);
         // await OnDeleteEmployeeAsync.InvokeAsync(Employee.Id);
+    }
+
+    @* private void OpenDialog()
+{
+var options = new DialogOptions { CloseOnEscapeKey = true };
+DialogService.Show<ConfirmDialog>("Simple Dialog", options);
+} *@
+
+    private async Task Confirm_Clicked(bool isConfirmed)
+    {
+        if (isConfirmed)
+        {
+            await employeeService.DeleteEmployeeAsync(Employee.Id);
+            await OnDeleteEmployeeAsync.InvokeAsync(Employee.Id);
+        }
     }
 }
