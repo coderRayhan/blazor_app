@@ -1,8 +1,10 @@
-html, body {
+html,
+body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-a, .btn-link {
+a,
+.btn-link {
     color: #006bb7;
 }
 
@@ -12,8 +14,12 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 .content {
@@ -42,31 +48,37 @@ h1:focus {
     color: white;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "An error has occurred."
+}
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
 }
 
-.spinner{
+.spinner {
     border: 16px solid silver;
-    border-top:16px solid #337AB7;
-    border-radius:50%;
-    height:80px;
-    width:80px;
-    top:40%;
-    left:55%;
-    animation:spin 700ms linear infinite;
-    position:absolute
+    border-top: 16px solid #337AB7;
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    top: 40%;
+    left: 55%;
+    animation: spin 700ms linear infinite;
+    position: absolute
 }
 
-@keyframes spin{
+.dialog_backdrop {
+    backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.5)
+}
+
+@keyframes spin {
     0% {
         transform: rotate(0deg)
     }
-    100%{
+
+    100% {
         transform: rotate(360deg)
     }
 }

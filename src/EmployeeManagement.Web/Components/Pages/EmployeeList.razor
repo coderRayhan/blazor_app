@@ -25,7 +25,7 @@ else
     @foreach (var employee in Employees)
         {
             <EmployeeCard Employee="employee" ShowFooter="@ShowFooter" OnSelectCheckboxChange="Child_Select_Changed"
-                OnDeleteEmployeeAsync="Delete_Employee" />
+                OnDeleteEmployeeAsync="Employee_Deleted" />
         }
     </div>
 }

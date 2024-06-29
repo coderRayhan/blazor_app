@@ -1,7 +1,9 @@
-﻿@using EmployeeManagement.Domain.Entities
+﻿@using AutoMapper
+@using EmployeeManagement.Domain.Entities
 @using EmployeeManagement.Domain.Enums
 @using EmployeeManagement.Web.Interfaces
 @using EmployeeManagement.Web.Models
+@using EmployeeManagement.Web.Services
 
 <EditForm Model="@EmployeeViewModel" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
@@ -87,17 +89,38 @@
 @code {
     [Inject]
     public IEmployeeService EmployeeService { get; set; }
+    [Inject]
+    public IMapper _mapper { get; set; }
+    [Inject]
+    public SnackbarSevice SnackbarService { get; set; }
     public EmployeeViewModel EmployeeViewModel { get; set; } = new EmployeeViewModel();
     public IEnumerable<Department> Departments { get; set; } = new List<Department>();
 
-    // [Parameter] public EventCallback<EmployeeViewModel> OnSubmit { get; set; }
+    [Parameter] public EventCallback<EmployeeViewModel> OnSubmit { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
 
 
     private async Task HandleSubmit()
     {
-        // EmployeeService.CreateEmployeeAsync(emp)
-        // await OnSubmit.InvokeAsync(EmployeeViewModel);
+        try{
+            Employee result = new();
+            var employee = _mapper.Map<Employee>(EmployeeViewModel);
+            var response = await EmployeeService.CreateEmployeeAsync(employee);
+            if (response is null)
+            {
+                SnackbarService.Show_Snackbar("Something went wrong", Severity.Error);
+                return;
+            }
+            SnackbarService.Show_Snackbar("Saved Successfully", Severity.Success);
+
+            if (OnSubmit.HasDelegate)
+            {
+                await OnSubmit.InvokeAsync(EmployeeViewModel);
+            }
+        }
+        catch(Exception ex){
+            SnackbarService.Show_Snackbar("Error saving data: " + ex.Message, Severity.Error);
+        }
     }
 
     private async Task HandleCancel()
