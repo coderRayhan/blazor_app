@@ -10,7 +10,9 @@ namespace EmployeeManagement.Web.Components.Pages
     public class EmployeeListBase : ComponentBase
     {
         [Inject]
-        public IDialogService DialogService { get; set; }
+        private FormDialogService DialogService { get; set; }
+        // [Inject]
+        // public IDialogService DialogService { get; set; }
         [Inject]
         public IEmployeeService service { get; set; }
         public List<Employee> Employees { get; set; }
@@ -42,33 +44,47 @@ namespace EmployeeManagement.Web.Components.Pages
         }
 
         //calling dynamic modal
-        public async void Add_Employee()
-        {
-            var parameters = new DialogParameters<FormDialog>();
-            // parameters.Add(x => x.ContentText, "Do you really want to delete these records? This process cannot be undone.");
-            parameters.Add(x => x.Content, (RenderFragment)(builder =>
-            {
-                builder.OpenComponent(0, typeof(CreateEmployee));
-                builder.CloseComponent();
-                builder.AddAttribute(1, "OnSubmit", EventCallback.Factory.Create<EmployeeViewModel>(this, HandleSubmit));
-                builder.AddAttribute(2, "OnCancel", EventCallback.Factory.Create(this, HandleCancel));
-            }));
-            parameters.Add(x => x.TitleText, "Delete Employee.");
-            parameters.Add(x => x.Color, Color.Error);
+        // public async void Add_Employee()
+        // {
+        //     var parameters = new DialogParameters<FormDialog>();
+        //     // parameters.Add(x => x.ContentText, "Do you really want to delete these records? This process cannot be undone.");
+        //     parameters.Add(x => x.Content, (RenderFragment)(builder =>
+        //     {
+        //         builder.OpenComponent(0, typeof(CreateEmployee));
+        //         builder.CloseComponent();
+        //         builder.AddAttribute(1, "OnSubmit", EventCallback.Factory.Create<EmployeeViewModel>(this, HandleSubmit));
+        //         builder.AddAttribute(2, "OnCancel", EventCallback.Factory.Create(this, HandleCancel));
+        //     }));
+        //     parameters.Add(x => x.TitleText, "Delete Employee.");
+        //     parameters.Add(x => x.Color, Color.Error);
 
-            var dialog = DialogService.Show<FormDialog>("Dynamic Dialog", parameters);
-            var result = await dialog.Result;
+        //     var dialog = DialogService.Show<FormDialog>("Dynamic Dialog", parameters);
+        //     var result = await dialog.Result;
+        // }
+
+        // private void HandleSubmit(EmployeeViewModel value)
+        // {
+        //     EmployeeViewModel = value;
+        //     MudDialog.Close(DialogResult.Ok(true));
+        // }
+
+        // private void HandleCancel()
+        // {
+        //     MudDialog.Cancel();
+        // }
+
+        protected async Task ShowMyFormDialog()
+        {
+            var parameters = new DialogParameters();
+            parameters.Add("OnSubmit", EventCallback.Factory.Create<EmployeeViewModel>(this, OnFormSubmit));
+            await DialogService.ShowFormDialog<CreateEmployee>(parameters);
         }
 
-        private void HandleSubmit(EmployeeViewModel value)
+        protected Task OnFormSubmit(EmployeeViewModel formData)
         {
-            EmployeeViewModel = value;
-            MudDialog.Close(DialogResult.Ok(true));
-        }
-
-        private void HandleCancel()
-        {
-            MudDialog.Cancel();
+            // Handle the submitted form data (e.g., save it to the database)
+            Console.WriteLine($"Name: {formData.FirstName}, Email: {formData.Email}");
+            return Task.CompletedTask;
         }
     }
 }

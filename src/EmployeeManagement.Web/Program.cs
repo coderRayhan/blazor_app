@@ -27,6 +27,7 @@ builder.Services.AddMudServices(config =>
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<SnackbarSevice>();
+builder.Services.AddScoped<FormDialogService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

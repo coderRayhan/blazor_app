@@ -2,7 +2,7 @@
 @using EmployeeManagement.Domain.Enums
 @using EmployeeManagement.Web.Models
 
-<EditForm Model="@EmployeeViewModel" OnValidSubmit="OnValidSubmitAsync">
+<EditForm Model="@EmployeeViewModel" OnValidSubmit="HandleSubmit">
     <DataAnnotationsValidator />
 
     <ValidationSummary />
@@ -11,7 +11,8 @@
             <label class="form-label">First Name</label>
         </div>
         <div class="col-md-10">
-            <InputText @bind-Value="EmployeeViewModel.FirstName" class="form-control" placeholder="First Name"></InputText>
+            <InputText @bind-Value="EmployeeViewModel.FirstName" class="form-control" placeholder="First Name">
+            </InputText>
             <ValidationMessage For="@(() => EmployeeViewModel.FirstName)" />
         </div>
     </div>
@@ -20,7 +21,8 @@
             <label class="form-label">Last Name</label>
         </div>
         <div class="col-md-10">
-            <InputText @bind-Value="EmployeeViewModel.LastName" class="form-control" placeholder="First Name"></InputText>
+            <InputText @bind-Value="EmployeeViewModel.LastName" class="form-control" placeholder="First Name">
+            </InputText>
             <ValidationMessage For="@(() => EmployeeViewModel.LastName)" />
         </div>
     </div>
@@ -47,7 +49,8 @@
             <label class="form-label">Compare Email</label>
         </div>
         <div class="col-md-10">
-            <InputText @bind-Value="EmployeeViewModel.CompareEmail" class="form-control" placeholder="Email"></InputText>
+            <InputText @bind-Value="EmployeeViewModel.CompareEmail" class="form-control" placeholder="Email">
+            </InputText>
             <ValidationMessage For="@(() => EmployeeViewModel.CompareEmail)" />
         </div>
     </div>
@@ -87,14 +90,14 @@
     {
         await Task.Delay(0);
         Employee result = new();
-      //  var employee = _mapper.Map<Employee>(EmployeeViewModel);
-       // if (employee.Id != 0) result = await employeeService.UpdateEmployeeAsync(employee);
+        // var employee = _mapper.Map<Employee>(EmployeeViewModel);
+        // if (employee.Id != 0) result = await employeeService.UpdateEmployeeAsync(employee);
 
-      //  else result = await employeeService.CreateEmployeeAsync(employee);
+        // else result = await employeeService.CreateEmployeeAsync(employee);
 
-      //  if (result is not null) NavigateToEmployeeList();
+        // if (result is not null) NavigateToEmployeeList();
     }
-    
+
     [Parameter] public EventCallback<EmployeeViewModel> OnSubmit { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
 
