@@ -76,15 +76,17 @@ namespace EmployeeManagement.Web.Components.Pages
         protected async Task ShowMyFormDialog()
         {
             var parameters = new DialogParameters();
-            parameters.Add("OnSubmit", EventCallback.Factory.Create<EmployeeViewModel>(this, OnFormSubmit));
-            await DialogService.ShowFormDialog<CreateEmployee>(parameters);
+            //parameters.Add("OnSubmit", EventCallback.Factory.Create<EmployeeViewModel>(this, OnFormSubmit));
+            var dialofRef = await DialogService.ShowFormDialog<CreateEmployee>(parameters, "Create Employee");
+
+            DialogService.CloseFormDialog(dialofRef);
         }
 
-        protected Task OnFormSubmit(EmployeeViewModel formData)
-        {
-            // Handle the submitted form data (e.g., save it to the database)
-            Console.WriteLine($"Name: {formData.FirstName}, Email: {formData.Email}");
-            return Task.CompletedTask;
-        }
+        //protected Task OnFormSubmit(EmployeeViewModel formData)
+        //{
+        //    // Handle the submitted form data (e.g., save it to the database)
+        //    Console.WriteLine($"Name: {formData.FirstName}, Email: {formData.Email}");
+        //    return Task.CompletedTask;
+        //}
     }
 }
