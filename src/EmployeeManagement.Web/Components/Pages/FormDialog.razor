@@ -1,22 +1,22 @@
-<MudDialog>
+﻿<MudDialog>
     <TitleContent>
         @TitleText
     </TitleContent>
     <DialogContent>
-        @ContentText
+        @Content
         </DialogContent>
-        <DialogActions>
+        @* <DialogActions>
             <MudButton OnClick="Cancel">Cancel</MudButton>
-            <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit">@ButtonText</MudButton>
-        </DialogActions>
+            <MudButton Color="@Color" Variant="Variant.Filled" OnClick="Submit"></MudButton>
+        </DialogActions> *@
     </MudDialog>
 
     @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public string ContentText { get; set; }
+    [Parameter] public RenderFragment Content { get; set; }
 
-    [Parameter] public string ButtonText { get; set; }
+    // [Parameter] public string ButtonText { get; set; }
 
     [Parameter] public string TitleText { get; set; }
 
@@ -24,10 +24,10 @@
     [Parameter]
     public EventCallback<bool> OnConfirmationChange { get; set; } = new();
 
-    private async void Submit()
-    {
-        MudDialog.Close(DialogResult.Ok(true));
-    }
+    // private async void Submit()
+    // {
+    //     MudDialog.Close(DialogResult.Ok(true));
+    // }
 
-    private void Cancel() => MudDialog.Cancel();
+    // private void Cancel() => MudDialog.Cancel();
 }

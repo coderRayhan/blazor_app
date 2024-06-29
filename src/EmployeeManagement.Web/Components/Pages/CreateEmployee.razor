@@ -1,0 +1,111 @@
+﻿@using EmployeeManagement.Domain.Entities
+@using EmployeeManagement.Domain.Enums
+@using EmployeeManagement.Web.Models
+
+<EditForm Model="@EmployeeViewModel" OnValidSubmit="OnValidSubmitAsync">
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">First Name</label>
+        </div>
+        <div class="col-md-10">
+            <InputText @bind-Value="EmployeeViewModel.FirstName" class="form-control" placeholder="First Name"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.FirstName)" />
+        </div>
+    </div>
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Last Name</label>
+        </div>
+        <div class="col-md-10">
+            <InputText @bind-Value="EmployeeViewModel.LastName" class="form-control" placeholder="First Name"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.LastName)" />
+        </div>
+    </div>
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Date of Birth</label>
+        </div>
+        <div class="col-md-10">
+            <InputDate @bind-Value="EmployeeViewModel.DoB" class="form-control"></InputDate>
+            <ValidationMessage For="@(() => EmployeeViewModel.DoB)" />
+        </div>
+    </div>
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Email</label>
+        </div>
+        <div class="col-md-10">
+            <InputText @bind-Value="EmployeeViewModel.Email" class="form-control" placeholder="Email"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.Email)" />
+        </div>
+    </div>
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Compare Email</label>
+        </div>
+        <div class="col-md-10">
+            <InputText @bind-Value="EmployeeViewModel.CompareEmail" class="form-control" placeholder="Email"></InputText>
+            <ValidationMessage For="@(() => EmployeeViewModel.CompareEmail)" />
+        </div>
+    </div>
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Gender</label>
+        </div>
+        <div class="col-md-10">
+            <InputSelect @bind-Value="EmployeeViewModel.Gender" class="form-control">
+                @foreach (var gender in Enum.GetValues(typeof(Gender)))
+                {
+                    <option value="@gender">@gender</option>
+                }
+            </InputSelect>
+        </div>
+    </div>
+    <div class="row form-group mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Department</label>
+        </div>
+        <div class="col-md-10">
+            <InputSelectInt @bind-Value="EmployeeViewModel.DepartmentId" class="form-control">
+                @foreach (var item in Departments)
+                {
+                    <option value="@item.Id">@item.DepartmentName</option>
+                }
+            </InputSelectInt>
+        </div>
+    </div>
+    <button class="btn btn-primary mt-4" type="submit">Submit</button>
+</EditForm>
+
+@code {
+    public EmployeeViewModel EmployeeViewModel { get; set; } = new EmployeeViewModel();
+    public IEnumerable<Department> Departments { get; set; } = new List<Department>();
+    public async void OnValidSubmitAsync()
+    {
+        await Task.Delay(0);
+        Employee result = new();
+      //  var employee = _mapper.Map<Employee>(EmployeeViewModel);
+       // if (employee.Id != 0) result = await employeeService.UpdateEmployeeAsync(employee);
+
+      //  else result = await employeeService.CreateEmployeeAsync(employee);
+
+      //  if (result is not null) NavigateToEmployeeList();
+    }
+    
+    [Parameter] public EventCallback<EmployeeViewModel> OnSubmit { get; set; }
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+
+    private async Task HandleSubmit()
+    {
+        await OnSubmit.InvokeAsync(EmployeeViewModel);
+    }
+
+    private async Task HandleCancel()
+    {
+        await OnCancel.InvokeAsync();
+    }
+}
