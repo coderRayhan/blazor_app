@@ -1,4 +1,6 @@
 @page "/pages/employees"
+@using EmployeeManagement.Web.Pages.Employees.Components;
+@using EmployeeManagement.Domain.Entities;
 <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
     IconColor="Color.Surface" Disabled="false" OnClick="OnCreate">
 
@@ -7,11 +9,29 @@
 @code {
     private async Task OnCreate()
     {
-
+        var Employee = new Employee();
+        var param = new DialogParameters<EmployeeFormDialog>
+        {
+            {x => x.Model, Employee}
+        };
+        await ShowFormDialog("Create Employee", param);
     }
 
     private async Task ShowFormDialog(string title, DialogParameters param)
-    {
 
+    {
+        var options = new DialogOptions
+            {
+                CloseButton = true,
+                CloseOnEscapeKey = false,
+                MaxWidth = MaxWidth.Medium,
+                FullWidth = true
+            };
+        var dialog = DialogService.Show<EmployeeFormDialog>(title, param, options);
+        var state = await dialog.Result;
+        if (!state.Canceled)
+        {
+
+        }
     }
 }
