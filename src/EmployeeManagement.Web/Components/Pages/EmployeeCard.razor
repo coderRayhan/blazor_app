@@ -4,7 +4,7 @@
 @using EmployeeManagement.Web.Components
 @using CustomComponent
 @using EmployeeManagement.Web.Services
-@inject IDialogService DialogService
+@* @inject IDialogService DialogService *@
 
 <div class="card m-3" style="min-width:18rem; max-width:30%">
     <div class="card-header">
@@ -41,7 +41,7 @@
     [Inject]
     public IEmployeeService employeeService { get; set; }
     [Inject]
-    public SnackbarSevice snackbarSevice { get; set; }
+    public RSnackbarService snackbarSevice { get; set; }
 
     protected ConfirmModalBase DeleteConfirmation { get; set; } = new();
 
