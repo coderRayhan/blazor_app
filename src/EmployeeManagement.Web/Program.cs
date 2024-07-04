@@ -28,6 +28,7 @@ builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<RSnackbarService>();
 builder.Services.AddScoped<FormDialogService>();
+builder.Services.AddScoped<FormDialogService2>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,0 +1,19 @@
+﻿<MudDialog>
+    <DialogContent>
+        @Body
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseDialog">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private MudDialogInstance dialogRef { get; set; }
+    [Parameter] public RenderFragment Body { get; set; }
+
+    private void CloseDialog()
+    {
+        dialogRef.Close();
+    }
+}

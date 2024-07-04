@@ -1,9 +1,11 @@
 @page "/pages/employees"
 @using EmployeeManagement.Web.Pages.Employees.Components;
 @using EmployeeManagement.Domain.Entities;
-<MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
-    IconColor="Color.Surface" Disabled="false" OnClick="OnCreate">
-
+@using EmployeeManagement.Web.Services
+@inject FormDialogService2 dialogService
+<MudButton Variant="Variant.Outlined" Color="Color.Primary"  Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+           IconColor="Color.Surface" Disabled="false" OnClick="OpenFormDialog">
+           Add New
 </MudButton>
 
 @code {
@@ -27,13 +29,25 @@
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
                 DisableBackdropClick = true,
-                
+
             };
         var dialog = DialogService.Show<EmployeeFormDialog>(title, param, options);
         var state = await dialog.Result;
         if (!state.Canceled)
         {
 
+        }
+    }
+
+
+    //calling dynamic form dialog
+    private async void OpenFormDialog()
+    {
+        var dialogRef = dialogService.ShowFormDialog<Dummy, Employee>("Create Form", new Employee());
+        var state = await dialogRef.Result;
+        if (state.Cancelled)
+        {
+            
         }
     }
 }
