@@ -1,29 +1,46 @@
 @page "/pages/employees"
-@using EmployeeManagement.Web.Interfaces
-@using EmployeeManagement.Web.Pages.Employees.Components;
+@using EmployeeManagement.UI.Interfaces
+@using EmployeeManagement.UI.Pages.Employees.Components
 @using EmployeeManagement.Domain.Entities;
-@using EmployeeManagement.Web.Services
+@using EmployeeManagement.UI.Services
 @using Microsoft.JSInterop
-@inject FormDialogService2 dialogService
+@using MudBlazor
+@inject FormDialogService dialogService
 @inject IJSRuntime jsruntime
 @inject IEmployeeService EmployeeService
-<MudButton Variant="Variant.Outlined" Color="Color.Primary"  Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
-           IconColor="Color.Surface" Disabled="false" OnClick="OpenFormDialog">
-           Add New
-</MudButton>
+<MudGrid Class="justify-end">
+    <MudItem>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+                   IconColor="Color.Surface" Disabled="false" OnClick="RefreshData">
+            Refresh
+        </MudButton>
+    </MudItem>
+    <MudItem>
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+                   IconColor="Color.Surface" Disabled="false" OnClick="OpenFormDialog">
+            Add New
+        </MudButton>
+    </MudItem>
+</MudGrid>
+
 <MudDataGrid 
     T="Employee"
-    ServerData="@(ServerReload)" 
     Loading="@_loading"
     @ref="_table" 
-    Virtualize="true">
+    MultiSelection="true"
+    SortMode="SortMode.Multiple"
+    ServerData="@(ServerReload)" 
+    >
     <Columns>
-        <PropertyColumn Property="x => x.FirstName" Title="First Name" />
+        <PropertyColumn Property="x => x.FirstName" Title="First Name" Sortable="true" />
         <PropertyColumn Property="x => x.LastName" Title="Last Name" />
         <PropertyColumn Property="x => x.Email" Title="Email" />
         <PropertyColumn Property="x => x.DoB" Title="Date of Birth" />
         <PropertyColumn Property="x => x.Gender" Title="Gender" />
     </Columns>
+    <PagerContent>
+        <MudDataGridPager T="Employee" />
+    </PagerContent>
 </MudDataGrid>
 @code {
     public IEnumerable<Employee> EmployeeList { get; set; } = [];
@@ -92,5 +109,10 @@
         {
             _loading = false;
         }
+    }
+
+    private async Task RefreshData()
+    {
+        await _table.ReloadServerData();
     }
 }

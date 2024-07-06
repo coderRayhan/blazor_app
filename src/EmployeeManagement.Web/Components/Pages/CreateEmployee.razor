@@ -92,7 +92,7 @@
     [Inject]
     public IMapper _mapper { get; set; }
     [Inject]
-    public RSnackbarService SnackbarService { get; set; }
+    public RSnackbarService SnackbarService { get; set; } = default!;
     public EmployeeViewModel EmployeeViewModel { get; set; } = new EmployeeViewModel();
     public IEnumerable<Department> Departments { get; set; } = new List<Department>();
 
