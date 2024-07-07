@@ -1,8 +1,9 @@
 ﻿@using EmployeeManagement.Domain.Entities;
 @using EmployeeManagement.Domain.Enums
-@using EmployeeManagement.Web.Interfaces
-@using EmployeeManagement.Web.Services
+@using EmployeeManagement.UI.Interfaces
+@using EmployeeManagement.UI.Services
 @using Microsoft.AspNetCore.Components.Forms;
+@using MudBlazor
 @inject IDepartmentService _departmentService
 @inject IEmployeeService _employeeService
 @inject RSnackbarService _snackbar
@@ -71,8 +72,12 @@
             </MudItem>
         </MudGrid>
     </MudItem>
-    <MudButton OnClick="Cancel">Cancel</MudButton>
-    <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Submit</MudButton>
+    <MudGrid Class="mud-dialog-actions justify-end justify-content-end">
+        <MudItem>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Submit</MudButton>
+        </MudItem>
+    </MudGrid>
 </EditForm>
 
 @code {
@@ -93,7 +98,7 @@
 
     private async Task Cancel()
     {
-        MudDialog.Close();
+        MudDialog.Close(DialogResult.Cancel());
     }
 
     private async Task ValidSubmit()
