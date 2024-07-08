@@ -1,83 +1,116 @@
 @page "/pages/employees"
+@using EmployeeManagement.Domain.Enums
+@using EmployeeManagement.UI.Components.Shared
 @using EmployeeManagement.UI.Interfaces
 @using EmployeeManagement.UI.Pages.Employees.Components
 @using EmployeeManagement.Domain.Entities;
 @using EmployeeManagement.UI.Services
+@using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
 @using MudBlazor
 @inject FormDialogService dialogService
 @inject IJSRuntime jsruntime
 @inject IEmployeeService EmployeeService
-<MudGrid Class="justify-end">
-    <MudItem>
-        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
-                   IconColor="Color.Surface" Disabled="false" OnClick="RefreshData">
-            Refresh
-        </MudButton>
-    </MudItem>
-    <MudItem>
-        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
-                   IconColor="Color.Surface" Disabled="false" OnClick="OpenFormDialog">
-            Add New
-        </MudButton>
-    </MudItem>
-</MudGrid>
+<PageTitle>@Title</PageTitle>
+    <MudGrid Class="justify-end">
+        <MudItem>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+                       IconColor="Color.Surface" Disabled="false" OnClick="RefreshData">
+                Refresh
+            </MudButton>
+        </MudItem>
+        <MudItem>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
+                       IconColor="Color.Surface" Disabled="false" OnClick="OpenFormDialog">
+                Add New
+            </MudButton>
+        </MudItem>
+    </MudGrid>
 
-<MudDataGrid 
-    T="Employee"
-    Loading="@_loading"
-    @ref="_table" 
-    MultiSelection="true"
-    SortMode="SortMode.Multiple"
-    ServerData="@(ServerReload)" 
-    >
-    <Columns>
-        <PropertyColumn Property="x => x.FirstName" Title="First Name" Sortable="true" />
-        <PropertyColumn Property="x => x.LastName" Title="Last Name" />
-        <PropertyColumn Property="x => x.Email" Title="Email" />
-        <PropertyColumn Property="x => x.DoB" Title="Date of Birth" />
-        <PropertyColumn Property="x => x.Gender" Title="Gender" />
-    </Columns>
-    <PagerContent>
-        <MudDataGridPager T="Employee" />
-    </PagerContent>
-</MudDataGrid>
-@code {
+    <MudDataGrid T="Employee"
+                 ServerData="ServerReload"
+                 FixedHeader="true"
+                 FixedFooter="true"
+                 Virtualize="true"
+                 Height="calc(100vh - 370px)"
+                 Loading="_loading"
+                 MultiSelection="true"
+                 ColumnResizeMode="ResizeMode.Column"
+                 Hover="true" @ref="_table">
+        <ToolBarContent>
+            <div class="d-flex align-start flex-grow-1">
+                <div class="d-flex gap-4 flex-column">
+                    <MudText Typo="Typo.caption" Class="mb-2">Employee</MudText>
+                    <MudEnumSelect TEnum="Gender" Style="min-width:120px" ValueChanged="OnListViewChanged" Value="_genderListView" Dense="true" Label="List View"></MudEnumSelect>
+                </div>
+
+                <div class="flex-grow-1" />
+                <div class="d-flex flex-column justify-end">
+                    <div class="d-flex gap-1">
+                        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                            <MudButton Variant="Variant.Outlined"
+                                       Size="Size.Small"
+                                       Disabled="_loading"
+                                       OnClick="RefreshData"
+                                       StartIcon="@Icons.Material.Filled.Refresh"
+                                       IconColor="Color.Surface" Color="Color.Primary">
+                                Refresh
+                            </MudButton>
+                            <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                                       StartIcon="@Icons.Material.Filled.Add"
+                                       Size="Size.Small"
+                                       Disabled="@_loading"
+                                       OnClick="OpenFormDialog"
+                                       IconColor="Color.Surface">
+                                New
+                            </MudButton>
+                            @* <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                        StartIcon="@Icons.Material.Filled.ContentCopy"
+                        Size="Size.Small"
+                        Disabled="@(_selectedItems.Count != 1)"
+                        OnClick="OnClone"
+                        IconColor="Color.Surface">
+                        Clone
+                        </MudButton> *@
+
+                        </MudHidden>
+                    </div>
+                    <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Value="@_searchText" Placeholder="Search" Adornment="Adornment.End"
+                                  AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Small">
+                    </MudTextField>
+                </div>
+
+            </div>
+        </ToolBarContent>
+        <Columns>
+
+        </Columns>
+    </MudDataGrid>
+
+    <MudDataGrid T="Employee"
+                 Loading="@_loading"
+                 @ref="_table"
+                 MultiSelection="true"
+                 SortMode="SortMode.Multiple"
+                 ServerData="@(ServerReload)">
+        <Columns>
+            <PropertyColumn Property="x => x.FirstName" Title="First Name" Sortable="true" />
+            <PropertyColumn Property="x => x.LastName" Title="Last Name" />
+            <PropertyColumn Property="x => x.Email" Title="Email" />
+            <PropertyColumn Property="x => x.DoB" Title="Date of Birth" />
+            <PropertyColumn Property="x => x.Gender" Title="Gender" />
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="Employee" />
+        </PagerContent>
+    </MudDataGrid>
+    @code {
+    private string Title = "Employee";
     public IEnumerable<Employee> EmployeeList { get; set; } = [];
-
+    private Gender _genderListView { get; set; }
     private MudDataGrid<Employee> _table = default!;
     private bool _loading;
-
-    // private async Task OnCreate()
-    // {
-    //     var Employee = new Employee();
-    //     var param = new DialogParameters<EmployeeFormDialog>
-    //     {
-    //         {x => x.Model, Employee}
-    //     };
-    //     await ShowFormDialog("Create Employee", param);
-    // }
-
-    // private async Task ShowFormDialog(string title, DialogParameters param)
-
-    // {
-    //     var options = new DialogOptions
-    //         {
-    //             CloseButton = true,
-    //             CloseOnEscapeKey = false,
-    //             MaxWidth = MaxWidth.Medium,
-    //             FullWidth = true,
-    //             DisableBackdropClick = true,
-
-    //         };
-    //     var dialog = DialogService.Show<EmployeeFormDialog>(title, param, options);
-    //     var state = await dialog.Result;
-    //     if (!state.Canceled)
-    //     {
-    //         await _table.ReloadServerData();
-    //     }
-    // }
-
+    private string _searchText = string.Empty;
 
     //calling dynamic form dialog
     private async void OpenFormDialog()
@@ -102,6 +135,18 @@
             // Query.PageSize = state.PageSize;
             // var result = await Mediator.Send(Query).ConfigureAwait(false);
             var list = await EmployeeService.GetEmployeesAsync();
+            list = list.Where(e =>
+            {
+                if (string.IsNullOrEmpty(_searchText))
+                    return true;
+                if (e.FirstName.Contains(_searchText, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (e.LastName.Contains(_searchText, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                if (e.Gender.ToString().Contains(_searchText, StringComparison.OrdinalIgnoreCase))
+                    return true;
+                return false;
+            }).ToArray();
 
             return new GridData<Employee> { TotalItems = list.Count(), Items = list };
         }
@@ -114,5 +159,14 @@
     private async Task RefreshData()
     {
         await _table.ReloadServerData();
+    }
+    private async Task OnListViewChanged()
+    {
+
+    }
+
+    private async Task OnSearch(string searchText)
+    {
+        
     }
 }
