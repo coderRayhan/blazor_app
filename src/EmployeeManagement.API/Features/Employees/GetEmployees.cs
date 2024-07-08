@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EmployeeManagement.API.Features.Employees;
 public static class GetEmployees
 {
-    public sealed record Query : IRequest<Result<List<Employee>>>;
+    public sealed record Query(int pageNumber, int pageSize, string searchText) : IRequest<Result<List<Employee>>>;
 
     private sealed record Handler(
         ApplicationDbContext Context
@@ -17,7 +17,20 @@ public static class GetEmployees
     {
         public async Task<Result<List<Employee>>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var employees = await Context.Employees.ToListAsync();
+            List<Employee>? employees = null;
+            if (string.IsNullOrEmpty(request.searchText))
+            {
+                employees = await Context.Employees.Skip((request.pageNumber - 1) * request.pageSize).Take(request.pageSize).ToListAsync();
+            }
+            else
+            {
+                employees = await Context.Employees
+                    .Where(e => e.FirstName.Contains(request.searchText, StringComparison.OrdinalIgnoreCase) || e.LastName.Contains(request.searchText, StringComparison.OrdinalIgnoreCase) || e.Gender.ToString().Contains(request.searchText, StringComparison.OrdinalIgnoreCase))
+                    .Skip((request.pageNumber - 1) * request.pageSize)
+                    .Take(request.pageSize)
+                    .ToListAsync();
+            }
+            
             return employees;
         }
     }
@@ -27,9 +40,9 @@ public class GetEmployeesEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/employee", async (ISender sender) =>
+        app.MapGet("api/employee/{pageNumber}/{pageSize}/{searchText?}", async (ISender sender, int pageNumber, int pageSize, string searchText = null) =>
         {
-            var response = await sender.Send(new GetEmployees.Query());
+            var response = await sender.Send(new GetEmployees.Query(pageNumber, pageSize, searchText));
 
             if (response.IsFailure)
                 return Results.BadRequest(response.Error);

@@ -12,7 +12,7 @@
 @inject IJSRuntime jsruntime
 @inject IEmployeeService EmployeeService
 <PageTitle>@Title</PageTitle>
-    <MudGrid Class="justify-end">
+@*     <MudGrid Class="justify-end">
         <MudItem>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add"
                        IconColor="Color.Surface" Disabled="false" OnClick="RefreshData">
@@ -25,7 +25,7 @@
                 Add New
             </MudButton>
         </MudItem>
-    </MudGrid>
+    </MudGrid> *@
 
     <MudDataGrid T="Employee"
                  ServerData="ServerReload"
@@ -83,11 +83,37 @@
             </div>
         </ToolBarContent>
         <Columns>
+            <TemplateColumn CellStyle="width:60px" Title="Actions" Sortable="false">
+                <CellTemplate>
+                    <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small" Dense="true"
+                             IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
+                        <MudMenuItem OnClick="@(() => OnEdit())">Edit</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => OnDelete())">Delete</MudMenuItem>
+                    </MudMenu>
+                </CellTemplate>
+            </TemplateColumn>
 
+            <PropertyColumn Property="x => x.FirstName" Title="First Name"></PropertyColumn>
+            <PropertyColumn Property="x => x.LastName" Title="LastName" />
+            <PropertyColumn Property="x => x.Email" Title="Email" />
+            <PropertyColumn Property="x => x.DoB" Title="Date of Birth" />
+            <PropertyColumn Property="x => x.Gender" Title="Gender" />
         </Columns>
+
+        <NoRecordsContent>
+            <MudText>No records available</MudText>
+        </NoRecordsContent>
+
+        <LoadingContent>
+            <MudText>Loading......</MudText>
+        </LoadingContent>
+
+        <PagerContent>
+            <MudDataGridPager T="Employee" PageSizeOptions="@(new[]{5, 10, 15, 20, 25})"></MudDataGridPager>
+        </PagerContent>
     </MudDataGrid>
 
-    <MudDataGrid T="Employee"
+@*     <MudDataGrid T="Employee"
                  Loading="@_loading"
                  @ref="_table"
                  MultiSelection="true"
@@ -103,7 +129,7 @@
         <PagerContent>
             <MudDataGridPager T="Employee" />
         </PagerContent>
-    </MudDataGrid>
+    </MudDataGrid> *@
     @code {
     private string Title = "Employee";
     public IEnumerable<Employee> EmployeeList { get; set; } = [];
@@ -167,6 +193,16 @@
 
     private async Task OnSearch(string searchText)
     {
-        
+        _searchText = searchText;
+        _table.ReloadServerData();
+    }
+
+    private async Task OnEdit()
+    {
+
+    }
+    private async Task OnDelete()
+    {
+
     }
 }
