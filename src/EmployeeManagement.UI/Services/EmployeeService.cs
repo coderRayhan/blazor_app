@@ -17,7 +17,7 @@ public class EmployeeService : IEmployeeService
         var response = await client.PostAsJsonAsync<Employee>("/api/employee", employee);
         if (response.IsSuccessStatusCode)
             return employee;
-        return null;
+        return null!;
     }
 
     public async Task DeleteEmployeeAsync(int id)
@@ -31,14 +31,15 @@ public class EmployeeService : IEmployeeService
     {
         var client = _clientFactory.CreateClient("blazorHttp");
         var employee = await client.GetFromJsonAsync<Employee>($"/api/employee/{id}");
-        return employee;
+        return employee!;
     }
 
     public async Task<IEnumerable<Employee>> GetEmployeesAsync()
     {
         var client = _clientFactory.CreateClient("blazorHttp");
+        var items = await client.GetStringAsync("/api/employee");
         var employees = await client.GetFromJsonAsync<IEnumerable<Employee>>("/api/employee");
-        return employees;
+        return employees!;
     }
 
     public async Task<Employee> UpdateEmployeeAsync(Employee employee)
@@ -47,6 +48,6 @@ public class EmployeeService : IEmployeeService
         var response = await client.PutAsJsonAsync<Employee>("/api/employee", employee);
         if (response.IsSuccessStatusCode)
             return employee;
-        return null;
+        return null!;
     }
 }
