@@ -11,6 +11,11 @@
 @inject FormDialogService dialogService
 @inject IJSRuntime jsruntime
 @inject IEmployeeService EmployeeService
+<style>
+    .mud-table-toolbar {
+        height: 120px !important;
+    }
+</style>
 <PageTitle>@Title</PageTitle>
 @*     <MudGrid Class="justify-end">
         <MudItem>
@@ -41,7 +46,13 @@
             <div class="d-flex align-start flex-grow-1">
                 <div class="d-flex gap-4 flex-column">
                     <MudText Typo="Typo.caption" Class="mb-2">Employee</MudText>
-                    <MudEnumSelect TEnum="Gender" Style="min-width:120px" ValueChanged="OnListViewChanged" Value="_genderListView" Dense="true" Label="List View"></MudEnumSelect>
+                    <MudEnumSelect TEnum="Gender"
+                        Style="min-width:120px"
+                        ValueChanged="OnListViewChanged"
+                        Value="_genderListView"
+                        Dense="true" 
+                        Label="List View"
+                    ></MudEnumSelect>
                 </div>
 
                 <div class="flex-grow-1" />
@@ -112,28 +123,10 @@
             <MudDataGridPager T="Employee" PageSizeOptions="@(new[]{5, 10, 15, 20, 25})"></MudDataGridPager>
         </PagerContent>
     </MudDataGrid>
-
-@*     <MudDataGrid T="Employee"
-                 Loading="@_loading"
-                 @ref="_table"
-                 MultiSelection="true"
-                 SortMode="SortMode.Multiple"
-                 ServerData="@(ServerReload)">
-        <Columns>
-            <PropertyColumn Property="x => x.FirstName" Title="First Name" Sortable="true" />
-            <PropertyColumn Property="x => x.LastName" Title="Last Name" />
-            <PropertyColumn Property="x => x.Email" Title="Email" />
-            <PropertyColumn Property="x => x.DoB" Title="Date of Birth" />
-            <PropertyColumn Property="x => x.Gender" Title="Gender" />
-        </Columns>
-        <PagerContent>
-            <MudDataGridPager T="Employee" />
-        </PagerContent>
-    </MudDataGrid> *@
     @code {
     private string Title = "Employee";
     public IEnumerable<Employee> EmployeeList { get; set; } = [];
-    private Gender _genderListView { get; set; }
+    private Gender _genderListView { get; set; } = Gender.Male;
     private MudDataGrid<Employee> _table = default!;
     private bool _loading;
     private string _searchText = string.Empty;
@@ -154,27 +147,9 @@
         try
         {
             _loading = true;
-            // Query.CurrentUser = UserProfile;
-            // Query.OrderBy = state.SortDefinitions.FirstOrDefault()?.SortBy ?? "Id";
-            // Query.SortDirection = state.SortDefinitions.FirstOrDefault()?.Descending ?? true ? SortDirection.Descending.ToString() : SortDirection.Ascending.ToString();
-            // Query.PageNumber = state.Page + 1;
-            // Query.PageSize = state.PageSize;
-            // var result = await Mediator.Send(Query).ConfigureAwait(false);
-            var list = await EmployeeService.GetEmployeesAsync();
-            list = list.Where(e =>
-            {
-                if (string.IsNullOrEmpty(_searchText))
-                    return true;
-                if (e.FirstName.Contains(_searchText, StringComparison.OrdinalIgnoreCase))
-                    return true;
-                if (e.LastName.Contains(_searchText, StringComparison.OrdinalIgnoreCase))
-                    return true;
-                if (e.Gender.ToString().Contains(_searchText, StringComparison.OrdinalIgnoreCase))
-                    return true;
-                return false;
-            }).ToArray();
+            var response = await EmployeeService.GetEmployeesAsync(_searchText, state.Page + 1, state.PageSize);
 
-            return new GridData<Employee> { TotalItems = list.Count(), Items = list };
+            return new GridData<Employee> { TotalItems = response.TotalItems, Items = response.Items };
         }
         finally
         {
@@ -186,15 +161,15 @@
     {
         await _table.ReloadServerData();
     }
-    private async Task OnListViewChanged()
+    private async Task OnListViewChanged(Gender gender)
     {
-
+        _genderListView = gender;
     }
 
     private async Task OnSearch(string searchText)
     {
         _searchText = searchText;
-        _table.ReloadServerData();
+        await _table.ReloadServerData();
     }
 
     private async Task OnEdit()

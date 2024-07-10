@@ -1,0 +1,51 @@
+﻿@page "/employees1"
+@using EmployeeManagement.Domain.Entities
+@using Components.Shared
+@using EmployeeManagement.Domain.Enums
+
+<EmployeeManagement.UI.Components.Shared.CommonTable TItem="Employee" Title="Employees" Items="EmployeeList" OnSearch="SearchEmployees">
+    <ColumnsContent>
+@*         <PropertyColumn Property="x => x.FirstName" Title="First Name"></PropertyColumn>
+        <PropertyColumn Property="x => x.LastName" Title="Last Name"></PropertyColumn>
+        <PropertyColumn Property="x => x.Email" Title="Email"></PropertyColumn>
+        <PropertyColumn Property="x => x.DoB" Title="Date of Birth"></PropertyColumn>
+        <PropertyColumn Property="x => x.Gender" Title="Gender"></PropertyColumn> *@
+    </ColumnsContent>
+</EmployeeManagement.UI.Components.Shared.CommonTable>
+
+@* <GenericTable TItem="Employee" Title="Employees" Items="EmployeeList" OnSearch="SearchEmployees" ActionTemplate="EmployeeActions">
+    <ColumnsContent>
+        <PropertyColumn Property="x => x.FirstName" Title="First Name"></PropertyColumn>
+        <PropertyColumn Property="x => x.LastName" Title="Last Name"></PropertyColumn>
+        <PropertyColumn Property="x => x.Email" Title="Email"></PropertyColumn>
+        <PropertyColumn Property="x => x.DoB" Title="Date of Birth"></PropertyColumn>
+        <PropertyColumn Property="x => x.Gender" Title="Gender"></PropertyColumn>
+    </ColumnsContent>
+</GenericTable> *@
+
+@code {
+    public List<Employee> EmployeeList { get; set; } = new List<Employee>
+    {
+        new Employee { FirstName = "John", LastName = "Doe", Email = "john.doe@example.com", DoB = new DateTime(1985, 1, 1), Gender = Gender.Male },
+    };
+
+    private async Task SearchEmployees(string searchText)
+    {
+        // Search logic here
+    }
+
+    private RenderFragment<Employee> EmployeeActions => context => @<MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small" Dense="true" IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
+        <MudMenuItem OnClick="@(() => OnEdit(context))">Edit</MudMenuItem>
+        <MudMenuItem OnClick="@(() => OnDelete(context))">Delete</MudMenuItem>
+    </MudMenu>;
+
+    private void OnEdit(Employee employee)
+    {
+        // Edit logic here
+    }
+
+    private void OnDelete(Employee employee)
+    {
+        // Delete logic here
+    }
+}

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CustomComponent", "src\Cust
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement.UI", "src\EmployeeManagement.UI\EmployeeManagement.UI.csproj", "{4E1D124C-2461-459E-8EA2-636A33BEE83E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeManagement.Mobile", "src\EmployeeManagement.Mobile\EmployeeManagement.Mobile.csproj", "{B0A4E57B-4E6B-43B4-825A-1A3D87C6E343}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EmployeeManagement.Mobile", "src\EmployeeManagement.Mobile\EmployeeManagement.Mobile.csproj", "{B0A4E57B-4E6B-43B4-825A-1A3D87C6E343}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
