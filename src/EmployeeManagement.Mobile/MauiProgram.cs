@@ -39,7 +39,8 @@ public static class MauiProgram
 #else
         builder.Services.AddSingleton(_ => new HttpClient
         {
-            BaseAddress = new Uri("http://10.0.2.2:5260")
+            //BaseAddress = new Uri("http://10.0.2.2:5260")
+            BaseAddress = new Uri("http://192.168.0.106:4040")
         });
 #endif
         builder.Services.AddTransient<IEmployeeService, EmployeeServiceMAUI>();
