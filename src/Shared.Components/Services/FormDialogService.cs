@@ -1,8 +1,9 @@
-﻿using EmployeeManagement.UI.Components.Shared;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using Shared.Components.Components;
+using Shared.Components.Components.Common;
 
-namespace EmployeeManagement.UI.Services
+namespace Shared.Components.Services
 {
     public class FormDialogService
     {

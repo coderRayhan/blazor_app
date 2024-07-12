@@ -1,11 +1,11 @@
-@page "/pages/employees"
+﻿
+@using EmployeeManagement.Domain.Entities
 @using EmployeeManagement.Domain.Enums
 @using EmployeeManagement.Services.Interfaces
-@using EmployeeManagement.UI.Pages.Employees.Components
-@using EmployeeManagement.Domain.Entities;
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.JSInterop
 @using MudBlazor
+@using Shared.Components.Components.Common
 @using Shared.Components.Services
 @inject FormDialogService dialogService
 @inject IJSRuntime jsruntime
@@ -60,7 +60,8 @@
                 <div class="flex-grow-1" />
                 <div class="d-flex flex-column justify-end">
                     <div class="d-flex gap-1">
-                        <MudHidden Breakpoint="Breakpoint.SmAndDown">
+                      @*   <MudHidden Breakpoint="Breakpoint.SmAndDown"> *@
+                        <MudHidden Breakpoint="Breakpoint.None">
                             <MudButton Variant="Variant.Outlined"
                                        Size="Size.Small"
                                        Disabled="_loading"

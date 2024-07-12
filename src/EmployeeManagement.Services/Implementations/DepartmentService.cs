@@ -1,7 +1,8 @@
 ﻿using EmployeeManagement.Domain.Entities;
-using EmployeeManagement.UI.Interfaces;
+using EmployeeManagement.Services.Interfaces;
+using System.Net.Http.Json;
 
-namespace EmployeeManagement.UI.Services
+namespace EmployeeManagement.Services.Implementations
 {
     public class DepartmentService : IDepartmentService
     {

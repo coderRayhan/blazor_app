@@ -1,8 +1,9 @@
 using EmployeeManagement.Domain.Entities;
-using EmployeeManagement.UI.Interfaces;
-using EmployeeManagement.UI.Models;
+using EmployeeManagement.Services.Interfaces;
+using EmployeeManagement.Services.Models;
+using System.Net.Http.Json;
 
-namespace EmployeeManagement.UI.Services;
+namespace EmployeeManagement.Services.Implementations;
 public class EmployeeService : IEmployeeService
 {
     private readonly IHttpClientFactory _clientFactory;
@@ -35,10 +36,10 @@ public class EmployeeService : IEmployeeService
         return employee!;
     }
 
-    public async Task<PaginatedResponse<Employee>> GetEmployeesAsync(string? searchText, int pageNumber, int pageSize)
+    public async Task<PaginatedResponse<Employee>> GetEmployeesAsync(string? searchText, int pageNumber, int pageSize, string orderBy, string sortDirection)
     {
         var client = _clientFactory.CreateClient("blazorHttp");
-        var employees = await client.GetFromJsonAsync<PaginatedResponse<Employee>>($"/api/employee?searchText={searchText}&pageNumber={pageNumber}&pageSize={pageSize}");
+        var employees = await client.GetFromJsonAsync<PaginatedResponse<Employee>>($"/api/employee?searchText={searchText}&pageNumber={pageNumber}&pageSize={pageSize}&orderBy={orderBy}&sortDirection={sortDirection}");
         return employees!;
     }
 

@@ -1,8 +1,9 @@
 using MudBlazor.Services;
 using EmployeeManagement.UI.Components;
 using MudBlazor;
-using EmployeeManagement.UI.Services;
-using EmployeeManagement.UI.Interfaces;
+using EmployeeManagement.Services.Implementations;
+using Shared.Components.Services;
+using EmployeeManagement.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

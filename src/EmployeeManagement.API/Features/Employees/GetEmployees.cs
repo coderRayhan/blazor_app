@@ -7,11 +7,12 @@ using EmployeeManagement.API.Shared;
 using EmployeeManagement.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace EmployeeManagement.API.Features.Employees;
 public static class GetEmployees
 {
-    public sealed record Query(int pageNumber, int pageSize, string? searchText) : IRequest<Result<PaginatedData<Employee>>>;
+    public sealed class Query() : PaginationFilter, IRequest<Result<PaginatedData<Employee>>>;
 
     private sealed record Handler(
         ApplicationDbContext Context
@@ -19,29 +20,25 @@ public static class GetEmployees
     {
         public async Task<Result<PaginatedData<Employee>>> Handle(Query request, CancellationToken cancellationToken)
         {
-
-            //return await Context.Employees.Where(e => string.IsNullOrEmpty(request.searchText) || 
-            //    e.FirstName.Contains(request.searchText, StringComparison.OrdinalIgnoreCase) ||
-            //    e.LastName.Contains(request.searchText, StringComparison.OrdinalIgnoreCase) ||
-            //    e.Gender.ToString().Contains(request.searchText, StringComparison.OrdinalIgnoreCase)).AsQueryable()
-            //    .ProjectQueryableToPaginatedDataAsync<Employee, Employee>(
-            //    request.pageNumber,
-            //    request.pageSize,
-            //    cancellationToken);
-
-            return await Context.Employees
-    .Where(e => string.IsNullOrEmpty(request.searchText) ||
-                EF.Functions.Like(e.FirstName, $"%{request.searchText}%") ||
-                EF.Functions.Like(e.LastName, $"%{request.searchText}%")  //||
-               // EF.Functions.Like(e.Gender.ToString(), $"%{request.searchText}%")
+            try
+            {
+                return await Context.Employees
+                .OrderBy($"{request.OrderBy} {request.SortingDirection}")
+                .Where(e => string.IsNullOrEmpty(request.SearchText) ||
+                EF.Functions.Like(e.FirstName, $"%{request.SearchText}%") ||
+                EF.Functions.Like(e.LastName, $"%{request.SearchText}%")  //||
+                                                                          // EF.Functions.Like(e.Gender.ToString(), $"%{request.searchText}%")
                 )
-    .AsQueryable()
-    .ProjectQueryableToPaginatedDataAsync<Employee, Employee>(
-        request.pageNumber,
-        request.pageSize,
-        cancellationToken);
+                .ProjectQueryableToPaginatedDataAsync<Employee, Employee>(
+                request.PageNumber,
+                request.PageSize,
+                cancellationToken);
+            }
+            catch (Exception ex)
+            {
 
-
+                throw;
+            }
         }
     }
 }
@@ -52,7 +49,14 @@ public class GetEmployeesEndpoint : ICarterModule
     {
         app.MapGet("api/employee", async (ISender sender, [AsParameters] FilterParameter param) =>
         {
-            var response = await sender.Send(new GetEmployees.Query(param.PageNumber, param.PageSize, param.SearchText));
+            var response = await sender.Send(new GetEmployees.Query
+            {
+                SearchText = param.SearchText,
+                PageNumber = param.PageNumber,
+                PageSize = param.PageSize,
+                OrderBy = param.OrderBy!,
+                SortingDirection = param.SortDirection!
+            });
 
             if (response.IsFailure)
                 return Results.BadRequest(response.Error);

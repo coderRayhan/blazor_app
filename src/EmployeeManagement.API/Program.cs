@@ -21,7 +21,6 @@ builder.Services.AddCarter();
 builder.Services.AddScoped<ApplicationDbContextInitializer>();
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

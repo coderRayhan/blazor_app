@@ -1,7 +1,7 @@
 using EmployeeManagement.Domain.Entities;
-using EmployeeManagement.UI.Models;
+using EmployeeManagement.Services.Models;
 
-namespace EmployeeManagement.UI.Interfaces;
+namespace EmployeeManagement.Services.Interfaces;
 public interface IEmployeeService
 {
     Task<PaginatedResponse<Employee>> GetEmployeesAsync(string? searchText, int pageNumber, int pageSize, string orderBy, string sortDirection);
