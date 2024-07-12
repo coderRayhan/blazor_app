@@ -34,7 +34,7 @@ public static class MauiProgram
 #if WINDOWS
         builder.Services.AddSingleton(_ => new HttpClient
         {
-        BaseAddress = new Uri("http://localhost:5260")
+        BaseAddress = new Uri("http://192.168.0.106:4040")
         });
 #else
         builder.Services.AddSingleton(_ => new HttpClient
