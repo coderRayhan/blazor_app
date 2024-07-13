@@ -15,9 +15,9 @@ public class Employee : BaseEntity
     [EmailAddress]
     [EmailDomainValidator]
     public string Email { get; set; } = string.Empty;
-    public DateTime DoB { get; set; }
+    public DateTime? DoB { get; set; }
     public Gender Gender { get; set; }
     public int DepartmentId { get; set; }
-    public virtual Department Department { get; set; } = new();
+    public virtual Department Department { get; set; }
     public string PhotoPath { get; set; } = string.Empty;
 }

@@ -4,12 +4,13 @@ using MudBlazor;
 using EmployeeManagement.Services.Implementations;
 using Shared.Components.Services;
 using EmployeeManagement.Services.Interfaces;
+using Shared.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient("blazorHttp", (client) =>
 {
-    client.BaseAddress = new Uri("http://localhost:5260");
+    client.BaseAddress = new Uri("http://192.168.0.106:4040");
 });
 
 // Add MudBlazor services
@@ -23,8 +24,7 @@ builder.Services.AddMudServices(config =>
 
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 builder.Services.AddTransient<IDepartmentService, DepartmentService>();
-builder.Services.AddScoped<RSnackbarService>();
-builder.Services.AddScoped<FormDialogService>();
+builder.Services.AddComponentServices();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()

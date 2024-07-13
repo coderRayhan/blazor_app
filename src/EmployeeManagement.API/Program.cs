@@ -25,9 +25,9 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     await app.InitialzeDatabaseAsync();
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapCarter();
 

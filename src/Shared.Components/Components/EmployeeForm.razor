@@ -7,32 +7,34 @@
 @inject IDepartmentService _departmentService
 @inject IEmployeeService _employeeService
 @inject RSnackbarService _snackbar
-<EditForm Model="@Model" @ref="form" OnValidSubmit="ValidSubmit">
+<EditForm Model="@Model" @ref="form" >
     <DataAnnotationsValidator />
     @* <MudGrid Spacing="2"> *@
     <MudItem xs="12" sm="12">
-        <MudGrid>
+        <MudGrid Class="mb-2">
             <MudItem sm="6">
+                <InputNumber hidden @bind-Value="Model.Id" />
                 <MudTextField T="string"
                               Label="First Name"
                               @bind-Value="Model.FirstName"
                               Required="true"
-                              RequiredError="First name is required!" />
-                <ValidationMessage For="@(() => Model.LastName)" />
+                              RequiredError="First name is required!"
+                              For="@(() => Model.FirstName)" />
             </MudItem>
             <MudItem sm="6">
                 <MudTextField T="string"
                               Label="Last Name"
                               @bind-Value="Model.LastName"
                               Required="true"
-                              RequiredError="Last name is required!" />
+                              RequiredError="Last name is required!"
+                              For="@(() => Model.LastName)" />
             </MudItem>
         </MudGrid>
-        <MudGrid>
+        <MudGrid Class="mb-2">
             <MudItem sm="6">
-                <MudDatePicker Editable="true"
+                <MudDatePicker Editable="false"
                                Label="DOB"
-                               @bind-Value="Model.DoB"
+                               @bind-Date="Model.DoB"
                                Required="true"
                                RequiredError="DOB is required!" />
             </MudItem>
@@ -45,7 +47,7 @@
                               For="@(() => Model.Email)" />
             </MudItem>
         </MudGrid>
-        <MudGrid>
+        <MudGrid Class="mb-2">
             <MudItem sm="6">
                 <MudSelect T="Gender"
                            Label="Gender"
@@ -63,7 +65,9 @@
                            Label="Department"
                            @bind-Value="Model.DepartmentId"
                            Required="true"
-                           RequiredError="Department is required!">
+                           RequiredError="Department is required!"
+                           For="@(() => Model.DepartmentId)">
+                    <MudSelectItem Value="0">Choose Option</MudSelectItem>
                     @foreach (var department in Departments)
                     {
                         <MudSelectItem Value="@department.Id">@department.DepartmentName</MudSelectItem>
@@ -72,10 +76,11 @@
             </MudItem>
         </MudGrid>
     </MudItem>
-    <MudGrid Class="mud-dialog-actions justify-end justify-content-end">
+    <MudGrid Class="mud-dialog-actions justify-end justify-content-end mb-2">
         <MudItem>
             <MudButton OnClick="Cancel">Cancel</MudButton>
-            <MudButton Color="Color.Primary" ButtonType="ButtonType.Submit">Submit</MudButton>
+            <MudButton Color="Color.Primary" ButtonType="ButtonType.Button" OnClick="ValidSubmit">Save</MudButton>
+            <MudButton Color="Color.Primary" ButtonType="ButtonType.Button" OnClick="ValidSubmitAndNew">Save And New</MudButton>
         </MudItem>
     </MudGrid>
 </EditForm>
@@ -103,11 +108,29 @@
 
     private async Task ValidSubmit()
     {
-        var response = await _employeeService.CreateEmployeeAsync(Model);
+        if (!form.EditContext!.Validate())
+            return;
+        Employee? response;
+        if (Model.Id == 0)
+            response = await _employeeService.CreateEmployeeAsync(Model);
+        else
+            response = await _employeeService.UpdateEmployeeAsync(Model);
         if (response is not null)
         {
             MudDialog.Close(DialogResult.Ok(true));
             _snackbar.Show_Snackbar("Saved successful", Severity.Success);
+        }
+    }
+
+    private async Task ValidSubmitAndNew()
+    {
+        if (!form.EditContext!.Validate())
+            return;
+        var response = await _employeeService.CreateEmployeeAsync(Model);
+        if (response is not null)
+        {
+            _snackbar.Show_Snackbar("Saved successful", Severity.Success);
+            Model = new Employee();
         }
     }
 }

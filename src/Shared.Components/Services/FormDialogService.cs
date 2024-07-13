@@ -31,7 +31,7 @@ namespace Shared.Components.Services
                 CloseButton = true,
                 MaxWidth = MaxWidth.Medium,
                 FullWidth = true,
-                BackdropClick = true,
+                BackdropClick = false,
             };
 
             return _dialogService.Show<FormDialog>(title, parameters, options);

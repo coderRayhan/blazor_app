@@ -34,7 +34,7 @@ public static class CreateEmployee
         {
             var employee = request.Adapt<Employee>();
 
-            _context.Add(employee);
+            _context.Employees.Add(employee);
 
             await _context.SaveChangesAsync(cancellationToken);
 

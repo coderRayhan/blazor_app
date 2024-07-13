@@ -8,8 +8,9 @@
 @using Shared.Components.Components.Common
 @using Shared.Components.Services
 @inject FormDialogService dialogService
-@inject IJSRuntime jsruntime
 @inject IEmployeeService EmployeeService
+@inject ConfirmDialogService confirmDialog
+@inject RSnackbarService snackbarSevice
 <style>
     .mud-table-toolbar {
         height: 120px !important;
@@ -22,7 +23,7 @@
                  FixedHeader="true"
                  FixedFooter="true"
                  Virtualize="true"
-                 Height="calc(100vh - 370px)"
+                 Height="calc(100vh - 270px)"
                  Loading="_loading"
                  Filterable="true"
                  FilterMode="DataGridFilterMode.Simple"
@@ -87,8 +88,8 @@
                 <CellTemplate>
                     <MudMenu Icon="@Icons.Material.Filled.Edit" Variant="Variant.Filled" Size="Size.Small" Dense="true"
                              IconColor="Color.Info" AnchorOrigin="Origin.CenterLeft">
-                        <MudMenuItem OnClick="@(() => OnEdit())">Edit</MudMenuItem>
-                        <MudMenuItem OnClick="@(() => OnDelete())">Delete</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => OnEdit(context.Item))">Edit</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => OnDelete(context.Item.Id))">Delete</MudMenuItem>
                     </MudMenu>
                 </CellTemplate>
             </TemplateColumn>
@@ -167,12 +168,28 @@
         await _table.ReloadServerData();
     }
 
-    private async Task OnEdit()
+    private async Task OnEdit(Employee employee)
     {
-
+        var dialogRef = dialogService.ShowFormDialog<EmployeeForm, Employee>("Create Form", employee);
+        var state = await dialogRef.Result;
+        if (!state.Canceled)
+        {
+            await _table.ReloadServerData();
+        }
     }
-    private async Task OnDelete()
-    {
 
+    private async Task OnDelete(int id)
+    {
+        var dialog = await confirmDialog.Show_Dialog("Do you really want to delete this records? This process cannot be undone.");
+        var result = await dialog!.Result;
+        if (!result!.Canceled)
+        {
+            await EmployeeService.DeleteEmployeeAsync(id);
+            snackbarSevice.Show_Snackbar("Deleted successfully", MudBlazor.Severity.Success, op =>
+            {
+                op.CloseAfterNavigation = true;
+            });
+            await _table.ReloadServerData();
+        }
     }
 }

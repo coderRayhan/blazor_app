@@ -3,6 +3,7 @@ using EmployeeManagement.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using MudBlazor;
 using MudBlazor.Services;
+using Shared.Components;
 using Shared.Components.Services;
 
 namespace EmployeeManagement.Mobile;
@@ -45,8 +46,7 @@ public static class MauiProgram
 #endif
         builder.Services.AddTransient<IEmployeeService, EmployeeServiceMAUI>();
         builder.Services.AddTransient<IDepartmentService, DepartmentServiceMAUI>();
-        builder.Services.AddScoped<RSnackbarService>();
-        builder.Services.AddScoped<FormDialogService>();
+        builder.Services.AddComponentServices();
 
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
