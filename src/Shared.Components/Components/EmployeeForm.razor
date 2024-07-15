@@ -7,7 +7,7 @@
 @inject IDepartmentService _departmentService
 @inject IEmployeeService _employeeService
 @inject RSnackbarService _snackbar
-<EditForm Model="@Model" @ref="form" >
+<EditForm Model="@Model" @ref="form">
     <DataAnnotationsValidator />
     @* <MudGrid Spacing="2"> *@
     <MudItem xs="12" sm="12">
@@ -75,6 +75,43 @@
                 </MudSelect>
             </MudItem>
         </MudGrid>
+        <div class="d-flex flex-row gap-4 mb-2 mt-2">
+            <MudFileUpload 
+                T="IBrowserFile" 
+                SuppressOnChangeWhenInvalid="true"
+                OnFilesChanged="UploadFile">
+                <ActivatorContent>
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.CloudUpload" Disabled="_uploading">
+                        @if (_uploading)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Processing</MudText>
+                        }
+                        else
+                        {
+                            <MudText>Upload File</MudText>
+                        }
+                    </MudButton>
+                </ActivatorContent>
+            </MudFileUpload>
+        </div>
+        <MudText Typo="Typo.body2">The recommended size for uploading images is 640X320</MudText>
+            <div class="d-fex">
+                @if (_img is not null)
+            {
+                    <div style="float:left; position: relative; width: 160px; height: 80px; margin: 10px;">
+                            <MudImage ObjectFit="ObjectFit.Cover" Height="80" Width="160" Src="@_img" Alt="img not available" Elevation="25" Class="mr-2 rounded-lg" />
+                        @* <div style="position: absolute;top: 0px;left: 0px; z-index: 2990;">
+                            <MudIconButton OnClick="@(() => PreviewImage(img.Url, Model.Pictures))" Icon="@Icons.Material.Filled.Image" aria-label="preview" Color="Color.Info" Size="MudBlazor.Size.Small"></MudIconButton>
+                        </div>
+                        <div style="position: absolute;top: 0px;right: 0px; z-index: 2990;">
+                            <MudIconButton OnClick="@(() => DeleteImage(img))" Icon="@Icons.Material.Filled.Delete" aria-label="delete" Color="Color.Error" Size="MudBlazor.Size.Small"></MudIconButton>
+                        </div> *@
+                    </div>
+            }
+        </div>
     </MudItem>
     <MudGrid Class="mud-dialog-actions justify-end justify-content-end mb-2">
         <MudItem>
@@ -91,6 +128,8 @@
 
     [CascadingParameter]
     private MudDialogInstance MudDialog { get; set; } = default!;
+    private bool _uploading;
+    private string _img;
 
     private IEnumerable<Department> Departments { get; set; } = [];
 
@@ -132,5 +171,27 @@
             _snackbar.Show_Snackbar("Saved successful", Severity.Success);
             Model = new Employee();
         }
+    }
+
+    private async Task UploadFile(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            _uploading = true;
+            var file = e.File;
+            var fileStream = e.File.OpenReadStream(512000 * 100);
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer);
+            var base64String = Convert.ToBase64String(buffer);
+            _img = $"data:{file.ContentType};base64,{base64String}";
+        }
+        catch (Exception ex)
+        {
+            
+            throw;
+        }
+        _uploading = true;
+        await Task.Delay(2000);
+        _uploading = false;
     }
 }
